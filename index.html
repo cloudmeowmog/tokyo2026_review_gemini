@@ -73,7 +73,7 @@
         <br><br>
         <button onclick="toggleEditMode()" id="edit-btn">✏️ 切換編輯模式</button>
         <button onclick="addNewEntry()">➕ 新增記錄點</button>
-        <button onclick="downloadHTML()" class="save-btn">💾 儲存/下載網頁</button>
+        <button onclick="downloadHTML()" class="save-btn">💾 儲存唯讀版網頁</button>
     </div>
 
     <div class="timeline" id="timeline">
@@ -338,30 +338,50 @@
             recalculateTimelineLayout(); 
         }
 
-        // === 下載/儲存 HTML 邏輯 ===
+        // === 下載/儲存 HTML (唯讀版) 邏輯 ===
         function downloadHTML() {
-            // 確保下載前關閉編輯模式，讓畫面保持乾淨
+            // 1. 確保下載前關閉編輯模式
             if (isEditing) toggleEditMode();
 
-            // 取得當前整個 HTML 結構
-            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            // 2. 複製一份目前的 HTML 結構 (避免改到原本頁面上還能用的功能)
+            const cloneDoc = document.documentElement.cloneNode(true);
+
+            // 3. 大掃除：移除所有編輯與上傳相關的元素，使其變成純粹的展示頁面
+            const controlPanel = cloneDoc.querySelector('.control-panel');
+            if (controlPanel) controlPanel.remove(); // 移除最上方按鈕區塊
+
+            cloneDoc.querySelectorAll('.edit-controls').forEach(el => el.remove()); // 移除上傳按鈕
+            cloneDoc.querySelectorAll('.drag-handle').forEach(el => el.remove());   // 移除拖曳把手
             
-            // 建立 Blob 物件
+            cloneDoc.querySelectorAll('.edit-text').forEach(el => {
+                el.removeAttribute('contenteditable');
+                el.classList.remove('editable');
+            });
+            
+            cloneDoc.querySelectorAll('.container').forEach(el => {
+                el.removeAttribute('draggable');
+                el.classList.remove('dragging');
+            });
+            
+            cloneDoc.querySelectorAll('.editing').forEach(el => el.classList.remove('editing'));
+
+            // 4. 取得處理後的純淨 HTML 內容
+            const htmlContent = "<!DOCTYPE html>\n" + cloneDoc.outerHTML;
+            
+            // 5. 建立 Blob 物件觸發下載
             const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
             const url = URL.createObjectURL(blob);
             
-            // 建立隱藏的下載連結並觸發點擊
             const a = document.createElement("a");
             a.href = url;
             a.download = "index.html"; 
             document.body.appendChild(a);
             a.click();
             
-            // 清理
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            alert("網頁已下載！請用這個新的 index.html 覆蓋您專案中的舊檔案，即可永久保存您的修改與排序。");
+            alert("✅ 唯讀版網頁已下載！\n\n這個下載下來的新 index.html 將無法再進行編輯與拖曳，非常適合直接上傳發佈或分享給親友留存。");
         }
 
         // === 圖片預覽與上傳 GitHub 邏輯 ===
@@ -373,8 +393,6 @@
                     const img = input.closest('.content').querySelector('.preview-img');
                     img.src = e.target.result;
                     img.style.display = 'block';
-                    // 為了不讓 HTML 檔案變得超級巨大，我們把 Base64 存在 dataset 準備傳給 GitHub
-                    // 上傳成功後，應該要把 img.src 替換成 GitHub 的 raw 網址 (以下 saveEntry 會處理)
                     input.dataset.base64 = e.target.result.split(',')[1];
                     input.dataset.filename = file.name;
                 }
@@ -403,14 +421,11 @@
                     
                     if (res.ok) {
                         const data = await res.json();
-                        alert('圖片上傳 GitHub 成功！\n請記得點擊最上方的「💾 儲存/下載網頁」來保存文字與圖片網址的變更。');
+                        alert('圖片上傳 GitHub 成功！\n請記得點擊最上方的「💾 儲存唯讀版網頁」來保存變更。');
                         
-                        // 上傳成功後，將本機預覽的 base64 替換為 GitHub 實際的圖片網址，這樣下載 HTML 後圖片才不會失效
-                        // 轉換 GitHub API url 為 raw 網址
                         const rawUrl = `https://raw.githubusercontent.com/${repo}/main/upload_photo/${filename}`;
                         imgElement.src = rawUrl;
                         
-                        // 清除 input 緩存
                         fileInput.dataset.base64 = '';
                         fileInput.value = ''; 
                     } else {
@@ -478,7 +493,6 @@
             Array.from(timeline.children).forEach(child => {
                 if (child.classList.contains('container')) {
                     child.classList.remove('left', 'right');
-                    // 根據目前順序重新分配左右
                     if (containerCount % 2 === 0) {
                         child.classList.add('left');
                     } else {
