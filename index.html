@@ -13,24 +13,39 @@
         .timeline { position: relative; max-width: 1000px; margin: 40px auto; }
         .timeline::after { content: ''; position: absolute; width: 6px; background-color: #c5c5c5; top: 0; bottom: 0; left: 50%; margin-left: -3px; }
         
-        .container { padding: 10px 40px; position: relative; background-color: inherit; width: 50%; }
+        /* 容器與動畫 */
+        .container { 
+            padding: 10px 40px; 
+            position: relative; 
+            background-color: inherit; 
+            width: 50%; 
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .container[draggable="true"] { cursor: grab; }
+        .container.dragging { opacity: 0.4; transform: scale(0.98); z-index: 10; }
+        
         .left { left: 0; }
         .right { left: 50%; }
         
-        .container::after { content: ''; position: absolute; width: 20px; height: 20px; right: -10px; background-color: white; border: 4px solid #ff9f55; top: 20px; border-radius: 50%; z-index: 1; }
-        .right::after { left: -10px; }
+        .container::after { content: ''; position: absolute; width: 20px; height: 20px; right: -10px; background-color: white; border: 4px solid #ff9f55; top: 20px; border-radius: 50%; z-index: 1; transition: left 0.3s, right 0.3s; }
+        .right::after { left: -10px; right: auto; }
         
         .content { padding: 20px; background-color: white; position: relative; border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .content img { width: 100%; border-radius: 6px; margin-top: 10px; display: none; }
-        .content h2 { margin-top: 0; color: #ff9f55; font-size: 1.2em; }
+        .content h2 { margin-top: 0; color: #ff9f55; font-size: 1.2em; padding-right: 20px; }
         .content p { line-height: 1.6; color: #555; margin-bottom: 0; }
         
+        /* 拖曳把手 */
+        .drag-handle { position: absolute; top: 15px; right: 15px; font-size: 20px; color: #ddd; cursor: grab; user-select: none; transition: color 0.2s; }
+        .container:hover .drag-handle { color: #ff9f55; }
+        .editing .drag-handle { display: none; } /* 編輯模式隱藏拖曳把手 */
+
         .day-divider { text-align: center; position: relative; z-index: 2; margin: 40px 0; }
         .day-divider span { background-color: #ff9f55; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
         .control-panel { text-align: center; margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         button, input[type="text"], input[type="password"] { padding: 10px; margin: 5px; border: 1px solid #ddd; border-radius: 5px; }
-        button { background-color: #ff9f55; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button { background-color: #ff9f55; color: white; border: none; cursor: pointer; font-weight: bold; transition: background 0.2s; }
         button:hover { background-color: #e88d44; }
         
         @media screen and (max-width: 768px) {
@@ -41,7 +56,7 @@
         }
         
         .editable { border: 1px dashed #ccc; padding: 5px; }
-        .edit-controls { display: none; margin-top: 10px; border-top: 1px solid #eee; pt: 10px; }
+        .edit-controls { display: none; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
         .editing .edit-controls { display: block; }
     </style>
 </head>
@@ -53,43 +68,48 @@
     <div class="control-panel">
         <input type="password" id="github-token" placeholder="GitHub Token">
         <input type="text" id="github-repo" placeholder="帳號/儲存庫">
-        <button onclick="toggleEditMode()">切換編輯模式</button>
+        <button onclick="toggleEditMode()" id="edit-btn">切換編輯模式</button>
         <button onclick="addNewEntry()">新增記錄點</button>
     </div>
 
     <div class="timeline" id="timeline">
         
         <div class="day-divider"><span>Day 1 - 2026.04.17</span></div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">桃園機場出發 → 成田機場</h2>
                 <p class="edit-text">帶著興奮的心情從桃園機場啟程，順利抵達成田機場第一航廈。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container right">
+        <div class="container right" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">Skyliner 往市區</h2>
                 <p class="edit-text">搭乘舒適又快速的 Skyliner 前往京成上野站。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">入住 Stayme THE HOTEL</h2>
                 <p class="edit-text">辦理入住，放下行李，這幾天的家非常舒適！</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container right">
+        <div class="container right" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">聖地巡禮：御茶之水聖橋</h2>
                 <p class="edit-text">《鈴芽之旅》經典場景，三線電車交會的震撼畫面。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">夜訪秋葉原與晚餐</h2>
                 <p class="edit-text">感受電器街的霓虹燈火，享受美食街的美味晚餐。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
@@ -97,22 +117,25 @@
         </div>
 
         <div class="day-divider"><span>Day 2 - 2026.04.18</span></div>
-        <div class="container right">
+        <div class="container right" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">豐洲市場與千客萬來</h2>
                 <p class="edit-text">逛市場水產棟，品嚐美味的玉子燒小吃，感受江戶風情。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">台場 DiverCity 鋼彈變身</h2>
                 <p class="edit-text">親眼目睹獨角獸鋼彈的變身演出，父子必看的地標。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container right">
+        <div class="container right" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">teamLab Planets</h2>
                 <p class="edit-text">赤腳進入水中美術館，光影與水的沉浸式體驗令人驚嘆。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
@@ -120,50 +143,57 @@
         </div>
 
         <div class="day-divider"><span>Day 3 - 2026.04.19</span></div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">淺草寺與雷門</h2>
                 <p class="edit-text">經典的紅燈籠拍照，穿梭在仲見世通的熱鬧氛圍中。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container right">
+        <div class="container right" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">搭乘東武線往晴空塔</h2>
                 <p class="edit-text">告別淺草，搭乘短途地鐵前往高聳入雲的晴空塔。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">晴空塔午餐與展望美景</h2>
                 <p class="edit-text">在晴空塔內享用午餐，俯瞰一望無際的東京城市景觀。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container right">
+        <div class="container right" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">晴空塔美景拍照點</h2>
                 <p class="edit-text">在進入購物中心前，先捕捉晴空塔壯麗的外觀全景。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">晴空塔寶可夢中心</h2>
                 <p class="edit-text">烈空坐的主題店，孩子們最期待的周邊採買時間。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container right">
+        <div class="container right" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">秋葉原 Pokémon Frienda</h2>
                 <p class="edit-text">挑戰最熱門的寶可夢機台，享受戰鬥與抓取的快感。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">夜訪阿美橫町</h2>
                 <p class="edit-text">夜晚的阿美橫町更有味道，適合最後的零食與藥妝補貨。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
@@ -171,29 +201,33 @@
         </div>
 
         <div class="day-divider"><span>Day 4 - 2026.04.20</span></div>
-        <div class="container right">
+        <div class="container right" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">新幹線出發：輕井澤</h2>
                 <p class="edit-text">搭乘高級的北陸新幹線，只要一小時就到達度假勝地。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">雲場池大自然散步</h2>
                 <p class="edit-text">騎著單車來到天鵝湖，感受輕井澤清新的空氣與綠意。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container right">
+        <div class="container right" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">舊輕井澤老街漫遊</h2>
                 <p class="edit-text">漫步在具有異國情調的商店街，品嚐當地的果醬與點心。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">王子 Outlet 血拼</h2>
                 <p class="edit-text">超大面積的購物區，還有讓孩子流連忘返的樂高專賣店。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
@@ -201,29 +235,33 @@
         </div>
 
         <div class="day-divider"><span>Day 5 - 2026.04.21</span></div>
-        <div class="container right">
+        <div class="container right" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">築地場外市場早餐</h2>
                 <p class="edit-text">東京的廚房！狐狸屋牛丼與現煎玉子燒是必吃首選。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">澀谷 PARCO 寶可夢中心</h2>
                 <p class="edit-text">朝聖擁有沉睡超夢的最潮寶可夢中心，並採購限定商品。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container right">
+        <div class="container right" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">SHIBUYA SKY 高空景觀</h2>
                 <p class="edit-text">在露天展望台拍下最迷人的東京夜景，感受城市的高度。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">新宿 3D 貓與歌舞伎町</h2>
                 <p class="edit-text">新宿東口的巨大立體貓打招呼，以及歌舞伎町的哥吉拉咆哮秀。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
@@ -231,15 +269,17 @@
         </div>
 
         <div class="day-divider"><span>Day 6 - 2026.04.22</span></div>
-        <div class="container right">
+        <div class="container right" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">阿美橫丁最後衝刺</h2>
                 <p class="edit-text">退房後在上野站寄放行李，進行最後的藥妝採購與零食補貨。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
             </div>
         </div>
-        <div class="container left">
+        <div class="container left" draggable="true">
             <div class="content">
+                <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">成田機場與賦歸</h2>
                 <p class="edit-text">搭乘 Skyliner 回到機場，帶著滿滿的戰利品與回憶平安返台。</p>
                 <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
@@ -248,9 +288,14 @@
     </div>
 
     <script>
+        // === 編輯與上傳邏輯 ===
         let isEditing = false;
         function toggleEditMode() {
             isEditing = !isEditing;
+            const btn = document.getElementById('edit-btn');
+            btn.style.backgroundColor = isEditing ? '#e84444' : '#ff9f55';
+            btn.innerText = isEditing ? '結束編輯模式' : '切換編輯模式';
+            
             document.querySelectorAll('.edit-text').forEach(el => {
                 el.contentEditable = isEditing;
                 if (isEditing) el.classList.add('editable');
@@ -260,15 +305,20 @@
                 if (isEditing) el.classList.add('editing');
                 else el.classList.remove('editing');
             });
+            // 編輯模式時關閉拖曳，避免與文字反白衝突
+            document.querySelectorAll('.container').forEach(el => {
+                el.setAttribute('draggable', !isEditing);
+            });
         }
 
         function addNewEntry() {
             const timeline = document.getElementById('timeline');
-            const side = document.querySelectorAll('.container').length % 2 === 0 ? 'left' : 'right';
             const newEntry = document.createElement('div');
-            newEntry.className = `container ${side}`;
+            newEntry.className = 'container left'; // 預設左邊，稍後統一重排
+            newEntry.setAttribute('draggable', !isEditing);
             newEntry.innerHTML = `
                 <div class="content ${isEditing ? 'editing' : ''}">
+                    <div class="drag-handle" title="拖曳以排序">☰</div>
                     <h2 contenteditable="${isEditing}" class="edit-text ${isEditing ? 'editable' : ''}">新記錄點</h2>
                     <p contenteditable="${isEditing}" class="edit-text ${isEditing ? 'editable' : ''}">輸入回顧心得...</p>
                     <img src="" class="preview-img">
@@ -279,6 +329,8 @@
                 </div>
             `;
             timeline.appendChild(newEntry);
+            bindDragEvents(newEntry);
+            recalculateTimelineLayout(); // 新增後立刻重排左右
         }
 
         function previewAndUploadImage(input) {
@@ -307,16 +359,85 @@
             if (fileInput.dataset.base64) {
                 const filename = Date.now() + "_" + fileInput.dataset.filename;
                 button.innerText = "上傳中...";
-                const res = await fetch(`https://api.github.com/repos/${repo}/contents/upload_photo/${filename}`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: `Upload: ${filename}`, content: fileInput.dataset.base64 })
-                });
-                if (res.ok) alert('成功！別忘了手動更新 index.html 的內容喔');
+                try {
+                    const res = await fetch(`https://api.github.com/repos/${repo}/contents/upload_photo/${filename}`, {
+                        method: 'PUT',
+                        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: `Upload: ${filename}`, content: fileInput.dataset.base64 })
+                    });
+                    if (res.ok) alert('圖片上傳成功！');
+                    else alert('上傳失敗，請檢查權限設定。');
+                } catch (e) {
+                    alert('發生錯誤');
+                }
                 button.innerText = "儲存";
             } else {
                 alert('請先選擇圖片');
             }
+        }
+
+        // === 拖曳排序邏輯 (Drag and Drop) ===
+        let draggedItem = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll('.container').forEach(bindDragEvents);
+            
+            const timeline = document.getElementById('timeline');
+            timeline.addEventListener('dragover', e => {
+                e.preventDefault(); // 允許 Drop
+                if (!draggedItem) return;
+                const afterElement = getDragAfterElement(timeline, e.clientY);
+                if (afterElement == null) {
+                    timeline.appendChild(draggedItem);
+                } else {
+                    timeline.insertBefore(draggedItem, afterElement);
+                }
+            });
+        });
+
+        function bindDragEvents(el) {
+            el.addEventListener('dragstart', () => {
+                if(isEditing) return; // 編輯模式防呆
+                draggedItem = el;
+                setTimeout(() => el.classList.add('dragging'), 0);
+            });
+            el.addEventListener('dragend', () => {
+                draggedItem.classList.remove('dragging');
+                draggedItem = null;
+                recalculateTimelineLayout(); // 放開後重新計算左右佈局
+            });
+        }
+
+        function getDragAfterElement(container, y) {
+            // 取得所有可以被排序的元素（包含景點卡片與日期分隔線）
+            const draggableElements = [...container.querySelectorAll('.container:not(.dragging), .day-divider')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function recalculateTimelineLayout() {
+            const timeline = document.getElementById('timeline');
+            let containerCount = 0; // 只計算景點卡片，不算分隔線
+            
+            Array.from(timeline.children).forEach(child => {
+                if (child.classList.contains('container')) {
+                    child.classList.remove('left', 'right');
+                    // 根據索引決定左右，偶數為左，奇數為右
+                    if (containerCount % 2 === 0) {
+                        child.classList.add('left');
+                    } else {
+                        child.classList.add('right');
+                    }
+                    containerCount++;
+                }
+            });
         }
     </script>
 </body>
