@@ -76,7 +76,7 @@
             width: 100%;
             border-radius: 6px;
             margin-top: 10px;
-            display: none; /* 預設隱藏，有圖片才顯示 */
+            display: none;
         }
         .content h2 {
             margin-top: 0;
@@ -108,7 +108,7 @@
         button:hover {
             background-color: #e88d44;
         }
-        /* 響應式設計：在小螢幕時改為單邊時間軸 */
+        /* 響應式設計 */
         @media screen and (max-width: 768px) {
             .timeline::after {
                 left: 31px;
@@ -164,11 +164,75 @@
     <div class="timeline" id="timeline">
         <div class="container left">
             <div class="content">
-                <h2 contenteditable="false" class="edit-text">出發！第一天的驚喜</h2>
+                <h2 contenteditable="false" class="edit-text">Day 1：抵達東京與入住</h2>
                 <h4 contenteditable="false" class="edit-text">2026-04-17</h4>
-                <p contenteditable="false" class="edit-text">記錄這美好的第一站，大家都非常興奮！</p>
+                <p contenteditable="false" class="edit-text">入住 Stayme THE HOTEL Ueno，出發前往日本橋寶可夢中心。</p>
                 <img src="" alt="景點照片" class="preview-img">
-                
+                <div class="edit-controls">
+                    <input type="file" accept="image/*" onchange="previewAndUploadImage(this)">
+                    <button onclick="saveEntry(this)">儲存此紀錄到 GitHub</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container right">
+            <div class="content">
+                <h2 contenteditable="false" class="edit-text">Day 2：淺草與晴空塔</h2>
+                <h4 contenteditable="false" class="edit-text">2026-04-18</h4>
+                <p contenteditable="false" class="edit-text">參觀淺草寺，接著前往晴空塔寶可夢中心。</p>
+                <img src="" alt="景點照片" class="preview-img">
+                <div class="edit-controls">
+                    <input type="file" accept="image/*" onchange="previewAndUploadImage(this)">
+                    <button onclick="saveEntry(this)">儲存此紀錄到 GitHub</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container left">
+            <div class="content">
+                <h2 contenteditable="false" class="edit-text">Day 3：輕井澤一日遊</h2>
+                <h4 contenteditable="false" class="edit-text">2026-04-19</h4>
+                <p contenteditable="false" class="edit-text">搭乘新幹線前往輕井澤一日遊。</p>
+                <img src="" alt="景點照片" class="preview-img">
+                <div class="edit-controls">
+                    <input type="file" accept="image/*" onchange="previewAndUploadImage(this)">
+                    <button onclick="saveEntry(this)">儲存此紀錄到 GitHub</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container right">
+            <div class="content">
+                <h2 contenteditable="false" class="edit-text">Day 4：澀谷與新宿</h2>
+                <h4 contenteditable="false" class="edit-text">2026-04-20</h4>
+                <p contenteditable="false" class="edit-text">逛澀谷寶可夢中心，並去尋找新宿的 3D 立體貓。</p>
+                <img src="" alt="景點照片" class="preview-img">
+                <div class="edit-controls">
+                    <input type="file" accept="image/*" onchange="previewAndUploadImage(this)">
+                    <button onclick="saveEntry(this)">儲存此紀錄到 GitHub</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container left">
+            <div class="content">
+                <h2 contenteditable="false" class="edit-text">Day 5：台場與數位藝術</h2>
+                <h4 contenteditable="false" class="edit-text">2026-04-21</h4>
+                <p contenteditable="false" class="edit-text">欣賞台場獨角獸鋼彈，並參觀 teamLab Planets。</p>
+                <img src="" alt="景點照片" class="preview-img">
+                <div class="edit-controls">
+                    <input type="file" accept="image/*" onchange="previewAndUploadImage(this)">
+                    <button onclick="saveEntry(this)">儲存此紀錄到 GitHub</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container right">
+            <div class="content">
+                <h2 contenteditable="false" class="edit-text">Day 6：聖橋朝聖與阿美橫町</h2>
+                <h4 contenteditable="false" class="edit-text">2026-04-22</h4>
+                <p contenteditable="false" class="edit-text">前往聖橋朝聖，接著在上野阿美橫町做最後採買，準備搭機返家。</p>
+                <img src="" alt="景點照片" class="preview-img">
                 <div class="edit-controls">
                     <input type="file" accept="image/*" onchange="previewAndUploadImage(this)">
                     <button onclick="saveEntry(this)">儲存此紀錄到 GitHub</button>
@@ -179,7 +243,7 @@
 
     <script>
         let isEditing = false;
-        let entryCount = 1;
+        let entryCount = 6; // 配合目前的 6 天行程，設定初始計數器
 
         // 切換編輯模式
         function toggleEditMode() {
@@ -225,7 +289,7 @@
             timeline.appendChild(newEntry);
         }
 
-        // 預覽圖片並轉換為 Base64 (準備上傳用)
+        // 預覽圖片並轉換為 Base64
         function previewAndUploadImage(input) {
             const file = input.files[0];
             if (file) {
@@ -234,7 +298,6 @@
                     const imgElement = input.parentElement.parentElement.querySelector('.preview-img');
                     imgElement.src = e.target.result;
                     imgElement.style.display = 'block';
-                    // 將 base64 字串存入 dataset，方便後續上傳
                     input.dataset.base64 = e.target.result.split(',')[1]; 
                     input.dataset.filename = file.name;
                 }
@@ -242,7 +305,7 @@
             }
         }
 
-        // 呼叫 GitHub API 上傳照片與資料
+        // 呼叫 GitHub API 上傳照片
         async function saveEntry(button) {
             const token = document.getElementById('github-token').value;
             const repo = document.getElementById('github-repo').value;
@@ -255,9 +318,8 @@
             const contentDiv = button.parentElement.parentElement;
             const fileInput = contentDiv.querySelector('input[type="file"]');
             
-            // 1. 如果有圖片，先上傳圖片到 upload_photo/ 目錄
             if (fileInput.dataset.base64 && fileInput.dataset.filename) {
-                const filename = new Date().getTime() + "_" + fileInput.dataset.filename; // 避免檔名重複
+                const filename = new Date().getTime() + "_" + fileInput.dataset.filename;
                 const path = `upload_photo/${filename}`;
                 
                 try {
@@ -277,8 +339,6 @@
                     if (response.ok) {
                         alert('圖片上傳 GitHub 成功！(儲存於 upload_photo/)');
                         button.innerText = "儲存此紀錄到 GitHub";
-                        // 註：實務上還需要把網頁當前的 HTML 結構也 commit 回 GitHub，
-                        // 但這需要抓取整個 DOM 或透過 JSON 管理資料狀態。
                     } else {
                         const err = await response.json();
                         alert('上傳失敗: ' + err.message);
@@ -290,7 +350,7 @@
                     button.innerText = "儲存此紀錄到 GitHub";
                 }
             } else {
-                alert("您已修改文字。若要發佈文字變更，實務上需將資料轉為 JSON 儲存或重新 commit index.html。");
+                alert("您已修改文字。若要發佈文字變更，請將專案的 index.html 檔同步 commit 喔！");
             }
         }
     </script>
