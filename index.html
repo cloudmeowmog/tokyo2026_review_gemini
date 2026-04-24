@@ -47,6 +47,8 @@
         button, input[type="text"], input[type="password"] { padding: 10px; margin: 5px; border: 1px solid #ddd; border-radius: 5px; }
         button { background-color: #ff9f55; color: white; border: none; cursor: pointer; font-weight: bold; transition: background 0.2s; }
         button:hover { background-color: #e88d44; }
+        .save-btn { background-color: #4CAF50; }
+        .save-btn:hover { background-color: #45a049; }
         
         @media screen and (max-width: 768px) {
             .timeline::after { left: 31px; }
@@ -68,8 +70,10 @@
     <div class="control-panel">
         <input type="password" id="github-token" placeholder="GitHub Token">
         <input type="text" id="github-repo" placeholder="帳號/儲存庫">
-        <button onclick="toggleEditMode()" id="edit-btn">切換編輯模式</button>
-        <button onclick="addNewEntry()">新增記錄點</button>
+        <br><br>
+        <button onclick="toggleEditMode()" id="edit-btn">✏️ 切換編輯模式</button>
+        <button onclick="addNewEntry()">➕ 新增記錄點</button>
+        <button onclick="downloadHTML()" class="save-btn">💾 儲存/下載網頁</button>
     </div>
 
     <div class="timeline" id="timeline">
@@ -80,7 +84,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">桃園機場出發 → 成田機場</h2>
                 <p class="edit-text">帶著興奮的心情從桃園機場啟程，順利抵達成田機場第一航廈。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container right" draggable="true">
@@ -88,7 +92,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">Skyliner 往市區</h2>
                 <p class="edit-text">搭乘舒適又快速的 Skyliner 前往京成上野站。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container left" draggable="true">
@@ -96,7 +100,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">入住 Stayme THE HOTEL</h2>
                 <p class="edit-text">辦理入住，放下行李，這幾天的家非常舒適！</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container right" draggable="true">
@@ -104,7 +108,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">聖地巡禮：御茶之水聖橋</h2>
                 <p class="edit-text">《鈴芽之旅》經典場景，三線電車交會的震撼畫面。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container left" draggable="true">
@@ -112,7 +116,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">夜訪秋葉原與晚餐</h2>
                 <p class="edit-text">感受電器街的霓虹燈火，享受美食街的美味晚餐。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
 
@@ -122,7 +126,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">豐洲市場與千客萬來</h2>
                 <p class="edit-text">逛市場水產棟，品嚐美味的玉子燒小吃，感受江戶風情。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container left" draggable="true">
@@ -130,7 +134,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">台場 DiverCity 鋼彈變身</h2>
                 <p class="edit-text">親眼目睹獨角獸鋼彈的變身演出，父子必看的地標。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container right" draggable="true">
@@ -138,7 +142,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">teamLab Planets</h2>
                 <p class="edit-text">赤腳進入水中美術館，光影與水的沉浸式體驗令人驚嘆。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
 
@@ -148,7 +152,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">淺草寺與雷門</h2>
                 <p class="edit-text">經典的紅燈籠拍照，穿梭在仲見世通的熱鬧氛圍中。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container right" draggable="true">
@@ -156,7 +160,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">搭乘東武線往晴空塔</h2>
                 <p class="edit-text">告別淺草，搭乘短途地鐵前往高聳入雲的晴空塔。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container left" draggable="true">
@@ -164,7 +168,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">晴空塔午餐與展望美景</h2>
                 <p class="edit-text">在晴空塔內享用午餐，俯瞰一望無際的東京城市景觀。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container right" draggable="true">
@@ -172,7 +176,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">晴空塔美景拍照點</h2>
                 <p class="edit-text">在進入購物中心前，先捕捉晴空塔壯麗的外觀全景。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container left" draggable="true">
@@ -180,7 +184,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">晴空塔寶可夢中心</h2>
                 <p class="edit-text">烈空坐的主題店，孩子們最期待的周邊採買時間。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container right" draggable="true">
@@ -188,7 +192,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">秋葉原 Pokémon Frienda</h2>
                 <p class="edit-text">挑戰最熱門的寶可夢機台，享受戰鬥與抓取的快感。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container left" draggable="true">
@@ -196,7 +200,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">夜訪阿美橫町</h2>
                 <p class="edit-text">夜晚的阿美橫町更有味道，適合最後的零食與藥妝補貨。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
 
@@ -206,7 +210,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">新幹線出發：輕井澤</h2>
                 <p class="edit-text">搭乘高級的北陸新幹線，只要一小時就到達度假勝地。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container left" draggable="true">
@@ -214,7 +218,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">雲場池大自然散步</h2>
                 <p class="edit-text">騎著單車來到天鵝湖，感受輕井澤清新的空氣與綠意。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container right" draggable="true">
@@ -222,7 +226,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">舊輕井澤老街漫遊</h2>
                 <p class="edit-text">漫步在具有異國情調的商店街，品嚐當地的果醬與點心。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container left" draggable="true">
@@ -230,7 +234,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">王子 Outlet 血拼</h2>
                 <p class="edit-text">超大面積的購物區，還有讓孩子流連忘返的樂高專賣店。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
 
@@ -240,7 +244,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">築地場外市場早餐</h2>
                 <p class="edit-text">東京的廚房！狐狸屋牛丼與現煎玉子燒是必吃首選。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container left" draggable="true">
@@ -248,7 +252,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">澀谷 PARCO 寶可夢中心</h2>
                 <p class="edit-text">朝聖擁有沉睡超夢的最潮寶可夢中心，並採購限定商品。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container right" draggable="true">
@@ -256,7 +260,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">SHIBUYA SKY 高空景觀</h2>
                 <p class="edit-text">在露天展望台拍下最迷人的東京夜景，感受城市的高度。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container left" draggable="true">
@@ -264,7 +268,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">新宿 3D 貓與歌舞伎町</h2>
                 <p class="edit-text">新宿東口的巨大立體貓打招呼，以及歌舞伎町的哥吉拉咆哮秀。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
 
@@ -274,7 +278,7 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">阿美橫丁最後衝刺</h2>
                 <p class="edit-text">退房後在上野站寄放行李，進行最後的藥妝採購與零食補貨。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
         <div class="container left" draggable="true">
@@ -282,19 +286,19 @@
                 <div class="drag-handle" title="拖曳以排序">☰</div>
                 <h2 class="edit-text">成田機場與賦歸</h2>
                 <p class="edit-text">搭乘 Skyliner 回到機場，帶著滿滿的戰利品與回憶平安返台。</p>
-                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存</button></div>
+                <img src="" class="preview-img"><div class="edit-controls"><input type="file" onchange="previewAndUploadImage(this)"><button onclick="saveEntry(this)">儲存圖片到 GitHub</button></div>
             </div>
         </div>
     </div>
 
     <script>
-        // === 編輯與上傳邏輯 ===
+        // === 編輯邏輯 ===
         let isEditing = false;
         function toggleEditMode() {
             isEditing = !isEditing;
             const btn = document.getElementById('edit-btn');
             btn.style.backgroundColor = isEditing ? '#e84444' : '#ff9f55';
-            btn.innerText = isEditing ? '結束編輯模式' : '切換編輯模式';
+            btn.innerText = isEditing ? '✅ 結束編輯模式' : '✏️ 切換編輯模式';
             
             document.querySelectorAll('.edit-text').forEach(el => {
                 el.contentEditable = isEditing;
@@ -305,16 +309,17 @@
                 if (isEditing) el.classList.add('editing');
                 else el.classList.remove('editing');
             });
-            // 編輯模式時關閉拖曳，避免與文字反白衝突
+            // 編輯模式時關閉拖曳，避免反白文字時意外拉動
             document.querySelectorAll('.container').forEach(el => {
                 el.setAttribute('draggable', !isEditing);
             });
         }
 
+        // === 新增記錄點邏輯 ===
         function addNewEntry() {
             const timeline = document.getElementById('timeline');
             const newEntry = document.createElement('div');
-            newEntry.className = 'container left'; // 預設左邊，稍後統一重排
+            newEntry.className = 'container left'; 
             newEntry.setAttribute('draggable', !isEditing);
             newEntry.innerHTML = `
                 <div class="content ${isEditing ? 'editing' : ''}">
@@ -324,15 +329,42 @@
                     <img src="" class="preview-img">
                     <div class="edit-controls">
                         <input type="file" onchange="previewAndUploadImage(this)">
-                        <button onclick="saveEntry(this)">儲存</button>
+                        <button onclick="saveEntry(this)">儲存圖片到 GitHub</button>
                     </div>
                 </div>
             `;
             timeline.appendChild(newEntry);
             bindDragEvents(newEntry);
-            recalculateTimelineLayout(); // 新增後立刻重排左右
+            recalculateTimelineLayout(); 
         }
 
+        // === 下載/儲存 HTML 邏輯 ===
+        function downloadHTML() {
+            // 確保下載前關閉編輯模式，讓畫面保持乾淨
+            if (isEditing) toggleEditMode();
+
+            // 取得當前整個 HTML 結構
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            
+            // 建立 Blob 物件
+            const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            
+            // 建立隱藏的下載連結並觸發點擊
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "index.html"; 
+            document.body.appendChild(a);
+            a.click();
+            
+            // 清理
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert("網頁已下載！請用這個新的 index.html 覆蓋您專案中的舊檔案，即可永久保存您的修改與排序。");
+        }
+
+        // === 圖片預覽與上傳 GitHub 邏輯 ===
         function previewAndUploadImage(input) {
             const file = input.files[0];
             if (file) {
@@ -341,6 +373,8 @@
                     const img = input.closest('.content').querySelector('.preview-img');
                     img.src = e.target.result;
                     img.style.display = 'block';
+                    // 為了不讓 HTML 檔案變得超級巨大，我們把 Base64 存在 dataset 準備傳給 GitHub
+                    // 上傳成功後，應該要把 img.src 替換成 GitHub 的 raw 網址 (以下 saveEntry 會處理)
                     input.dataset.base64 = e.target.result.split(',')[1];
                     input.dataset.filename = file.name;
                 }
@@ -351,10 +385,11 @@
         async function saveEntry(button) {
             const token = document.getElementById('github-token').value;
             const repo = document.getElementById('github-repo').value;
-            if (!token || !repo) return alert('請輸入 GitHub 資訊');
+            if (!token || !repo) return alert('請在上方輸入 GitHub Token 與 Repository (例如: username/repo)');
             
             const content = button.closest('.content');
             const fileInput = content.querySelector('input[type="file"]');
+            const imgElement = content.querySelector('.preview-img');
             
             if (fileInput.dataset.base64) {
                 const filename = Date.now() + "_" + fileInput.dataset.filename;
@@ -363,14 +398,29 @@
                     const res = await fetch(`https://api.github.com/repos/${repo}/contents/upload_photo/${filename}`, {
                         method: 'PUT',
                         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: `Upload: ${filename}`, content: fileInput.dataset.base64 })
+                        body: JSON.stringify({ message: `Upload photo: ${filename}`, content: fileInput.dataset.base64 })
                     });
-                    if (res.ok) alert('圖片上傳成功！');
-                    else alert('上傳失敗，請檢查權限設定。');
+                    
+                    if (res.ok) {
+                        const data = await res.json();
+                        alert('圖片上傳 GitHub 成功！\n請記得點擊最上方的「💾 儲存/下載網頁」來保存文字與圖片網址的變更。');
+                        
+                        // 上傳成功後，將本機預覽的 base64 替換為 GitHub 實際的圖片網址，這樣下載 HTML 後圖片才不會失效
+                        // 轉換 GitHub API url 為 raw 網址
+                        const rawUrl = `https://raw.githubusercontent.com/${repo}/main/upload_photo/${filename}`;
+                        imgElement.src = rawUrl;
+                        
+                        // 清除 input 緩存
+                        fileInput.dataset.base64 = '';
+                        fileInput.value = ''; 
+                    } else {
+                        const err = await res.json();
+                        alert('上傳失敗: ' + err.message);
+                    }
                 } catch (e) {
-                    alert('發生錯誤');
+                    alert('發生錯誤，請檢查網路狀態');
                 }
-                button.innerText = "儲存";
+                button.innerText = "儲存圖片到 GitHub";
             } else {
                 alert('請先選擇圖片');
             }
@@ -384,7 +434,7 @@
             
             const timeline = document.getElementById('timeline');
             timeline.addEventListener('dragover', e => {
-                e.preventDefault(); // 允許 Drop
+                e.preventDefault(); 
                 if (!draggedItem) return;
                 const afterElement = getDragAfterElement(timeline, e.clientY);
                 if (afterElement == null) {
@@ -397,19 +447,18 @@
 
         function bindDragEvents(el) {
             el.addEventListener('dragstart', () => {
-                if(isEditing) return; // 編輯模式防呆
+                if(isEditing) return; 
                 draggedItem = el;
                 setTimeout(() => el.classList.add('dragging'), 0);
             });
             el.addEventListener('dragend', () => {
                 draggedItem.classList.remove('dragging');
                 draggedItem = null;
-                recalculateTimelineLayout(); // 放開後重新計算左右佈局
+                recalculateTimelineLayout(); 
             });
         }
 
         function getDragAfterElement(container, y) {
-            // 取得所有可以被排序的元素（包含景點卡片與日期分隔線）
             const draggableElements = [...container.querySelectorAll('.container:not(.dragging), .day-divider')];
             return draggableElements.reduce((closest, child) => {
                 const box = child.getBoundingClientRect();
@@ -424,12 +473,12 @@
 
         function recalculateTimelineLayout() {
             const timeline = document.getElementById('timeline');
-            let containerCount = 0; // 只計算景點卡片，不算分隔線
+            let containerCount = 0; 
             
             Array.from(timeline.children).forEach(child => {
                 if (child.classList.contains('container')) {
                     child.classList.remove('left', 'right');
-                    // 根據索引決定左右，偶數為左，奇數為右
+                    // 根據目前順序重新分配左右
                     if (containerCount % 2 === 0) {
                         child.classList.add('left');
                     } else {
