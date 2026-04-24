@@ -166,7 +166,7 @@
             <div class="content">
                 <h2 contenteditable="false" class="edit-text">Day 1：抵達東京與入住</h2>
                 <h4 contenteditable="false" class="edit-text">2026-04-17</h4>
-                <p contenteditable="false" class="edit-text">入住 Stayme THE HOTEL Ueno，出發前往日本橋寶可夢中心。</p>
+                <p contenteditable="false" class="edit-text">桃園機場出發 → 抵達東京 → 入住 Stayme THE HOTEL Ueno → 日本橋寶可夢中心</p>
                 <img src="" alt="景點照片" class="preview-img">
                 <div class="edit-controls">
                     <input type="file" accept="image/*" onchange="previewAndUploadImage(this)">
@@ -177,9 +177,9 @@
 
         <div class="container right">
             <div class="content">
-                <h2 contenteditable="false" class="edit-text">Day 2：淺草與晴空塔</h2>
+                <h2 contenteditable="false" class="edit-text">Day 2：台場與數位藝術</h2>
                 <h4 contenteditable="false" class="edit-text">2026-04-18</h4>
-                <p contenteditable="false" class="edit-text">參觀淺草寺，接著前往晴空塔寶可夢中心。</p>
+                <p contenteditable="false" class="edit-text">teamLab Planets → 欣賞台場獨角獸鋼彈</p>
                 <img src="" alt="景點照片" class="preview-img">
                 <div class="edit-controls">
                     <input type="file" accept="image/*" onchange="previewAndUploadImage(this)">
@@ -190,9 +190,9 @@
 
         <div class="container left">
             <div class="content">
-                <h2 contenteditable="false" class="edit-text">Day 3：輕井澤一日遊</h2>
+                <h2 contenteditable="false" class="edit-text">Day 3：淺草、晴空塔與秋葉原</h2>
                 <h4 contenteditable="false" class="edit-text">2026-04-19</h4>
-                <p contenteditable="false" class="edit-text">搭乘新幹線前往輕井澤一日遊。</p>
+                <p contenteditable="false" class="edit-text">參觀淺草寺 → 搭東武晴空塔線到晴空塔 → 晴空塔美景 → 晴空塔寶可夢中心 → 秋葉原 Pokémon Frienda → 夜訪阿美橫町</p>
                 <img src="" alt="景點照片" class="preview-img">
                 <div class="edit-controls">
                     <input type="file" accept="image/*" onchange="previewAndUploadImage(this)">
@@ -205,7 +205,7 @@
             <div class="content">
                 <h2 contenteditable="false" class="edit-text">Day 4：澀谷與新宿</h2>
                 <h4 contenteditable="false" class="edit-text">2026-04-20</h4>
-                <p contenteditable="false" class="edit-text">逛澀谷寶可夢中心，並去尋找新宿的 3D 立體貓。</p>
+                <p contenteditable="false" class="edit-text">逛澀谷寶可夢中心 → 尋找新宿的 3D 立體貓</p>
                 <img src="" alt="景點照片" class="preview-img">
                 <div class="edit-controls">
                     <input type="file" accept="image/*" onchange="previewAndUploadImage(this)">
@@ -216,9 +216,9 @@
 
         <div class="container left">
             <div class="content">
-                <h2 contenteditable="false" class="edit-text">Day 5：台場與數位藝術</h2>
+                <h2 contenteditable="false" class="edit-text">Day 5：輕井澤一日遊</h2>
                 <h4 contenteditable="false" class="edit-text">2026-04-21</h4>
-                <p contenteditable="false" class="edit-text">欣賞台場獨角獸鋼彈，並參觀 teamLab Planets。</p>
+                <p contenteditable="false" class="edit-text">搭乘新幹線前往輕井澤一日遊</p>
                 <img src="" alt="景點照片" class="preview-img">
                 <div class="edit-controls">
                     <input type="file" accept="image/*" onchange="previewAndUploadImage(this)">
@@ -229,9 +229,9 @@
 
         <div class="container right">
             <div class="content">
-                <h2 contenteditable="false" class="edit-text">Day 6：聖橋朝聖與阿美橫町</h2>
+                <h2 contenteditable="false" class="edit-text">Day 6：聖橋朝聖與賦歸</h2>
                 <h4 contenteditable="false" class="edit-text">2026-04-22</h4>
-                <p contenteditable="false" class="edit-text">前往聖橋朝聖，接著在上野阿美橫町做最後採買，準備搭機返家。</p>
+                <p contenteditable="false" class="edit-text">前往聖橋朝聖 → 上野阿美橫町最後採買 → 準備搭機返家</p>
                 <img src="" alt="景點照片" class="preview-img">
                 <div class="edit-controls">
                     <input type="file" accept="image/*" onchange="previewAndUploadImage(this)">
@@ -243,9 +243,8 @@
 
     <script>
         let isEditing = false;
-        let entryCount = 6; // 配合目前的 6 天行程，設定初始計數器
+        let entryCount = 6; 
 
-        // 切換編輯模式
         function toggleEditMode() {
             isEditing = !isEditing;
             const textElements = document.querySelectorAll('.edit-text');
@@ -265,7 +264,6 @@
             alert(isEditing ? "編輯模式已開啟！您可以直接點擊文字進行修改。" : "編輯模式已關閉。");
         }
 
-        // 新增一個時間軸節點
         function addNewEntry() {
             entryCount++;
             const side = entryCount % 2 === 0 ? 'right' : 'left';
@@ -289,7 +287,6 @@
             timeline.appendChild(newEntry);
         }
 
-        // 預覽圖片並轉換為 Base64
         function previewAndUploadImage(input) {
             const file = input.files[0];
             if (file) {
@@ -305,7 +302,6 @@
             }
         }
 
-        // 呼叫 GitHub API 上傳照片
         async function saveEntry(button) {
             const token = document.getElementById('github-token').value;
             const repo = document.getElementById('github-repo').value;
